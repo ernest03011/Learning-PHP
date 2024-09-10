@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-function calculateAge($birthDate) : DateInterval | false
+function calculateAge($birthDate) : DateInterval | bool
 {
 
   $currentDate = new DateTime();
