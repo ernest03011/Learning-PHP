@@ -4,26 +4,24 @@ declare(strict_types = 1);
 
 use App\App;
 use App\Config;
-use App\Controllers\HomeController;
 use App\Router;
 
-
-
-require_once __DIR__ . '/../vendor/autoload.php';
+$root = dirname(__DIR__) . DIRECTORY_SEPARATOR;
+require_once $root . 'vendor/autoload.php';
 
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
 $dotenv->load();
 
-define('STORAGE_PATH', __DIR__ . '/../storage');
-define('VIEW_PATH', __DIR__ . '/../views');
+define('STORAGE_PATH', $root . 'storage' . DIRECTORY_SEPARATOR);
+define('APP_PATH', $root . 'app' . DIRECTORY_SEPARATOR);
+define('VIEW_PATH', $root . 'views' . DIRECTORY_SEPARATOR);
 
 $router = new Router();
 
-$router
-    ->get('/', [HomeController::class, 'index']);
+require_once APP_PATH . "routes.php";
 
 (new App(
     $router,
     ['uri' => $_SERVER['REQUEST_URI'], 'method' => $_SERVER['REQUEST_METHOD']],
     new Config($_ENV)
-))->run();
+))->run(); 
