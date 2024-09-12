@@ -10,3 +10,9 @@ $router
 $router
     ->get('/test', [Controllers\TestsControllers::class, 'test']);
 
+// $router
+//     ->get('/transactions', [Controllers\TestsControllers::class, 'test']);
+
+$router
+    ->get('/transactions/create', [Controllers\Transactions\CreateTransactionController::class, 'index']);
+
