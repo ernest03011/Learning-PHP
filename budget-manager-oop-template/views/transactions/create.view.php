@@ -53,7 +53,7 @@
 
 <div class="container">
     <h1>Upload Transactions CSV</h1>
-    <form action="/upload" method="POST" enctype="multipart/form-data">
+    <form action="/transactions" method="POST" enctype="multipart/form-data">
         <input type="file" name="transactions_file" accept=".csv" required>
         <br>
         <button type="submit" class="btn">Upload File</button>

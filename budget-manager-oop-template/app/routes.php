@@ -14,5 +14,8 @@ $router
     ->get('/transactions', [Controllers\TransactionsController::class, 'displayAllTransactions']);
 
 $router
+    ->post('/transactions', [Controllers\TransactionsController::class, 'uploadTransactions']);
+
+$router
     ->get('/transactions/create', [Controllers\TransactionsController::class, 'createTransaction']);
 

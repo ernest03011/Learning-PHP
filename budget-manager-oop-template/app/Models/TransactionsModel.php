@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-class Transaction {
+namespace App\Models;
+
+class TransactionsModel {
 
  public function saveTransaction($data) : void
  {
