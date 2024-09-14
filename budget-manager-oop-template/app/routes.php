@@ -17,5 +17,5 @@ $router
     ->post('/transactions', [Controllers\TransactionsController::class, 'uploadTransactions']);
 
 $router
-    ->get('/transactions/create', [Controllers\TransactionsController::class, 'createTransaction']);
+    ->get('/transactions/create', [Controllers\TransactionsController::class, 'showTransactionUploadPage']);
 

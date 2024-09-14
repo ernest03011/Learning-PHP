@@ -32,7 +32,7 @@ class TransactionsController{
     return View::make('');
   } 
 
-  public function createTransaction(): View
+  public function showTransactionUploadPage(): View
   {
       return View::make('transactions/create.view');
   }
