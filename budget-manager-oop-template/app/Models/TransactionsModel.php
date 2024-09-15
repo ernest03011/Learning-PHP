@@ -12,11 +12,6 @@ class TransactionsModel {
   $transactions = $this->parseCVSFile($fileName);
   $data = $this->transformCSVRow($transactions);
 
-  echo "<pre>";
-  var_dump($data);
-  echo "</pre>";
-  exit;
-
  }
 
  public function parseCVSFile(string $fileName) : array
@@ -39,16 +34,35 @@ class TransactionsModel {
  public function transformCSVRow(array $transactions) : array
  {
 
-  [$date, $checkNumber, $description, $amount] = $transactions;
+  $transformedTransactions = [];
 
-  $amount = (float) str_replace(['$', ','], '', $amount);
+  foreach ($transactions as $transaction) {
 
-  return[
-    'date' => $date,
-    'checkNumber' => $checkNumber,
-    'description' => $description,
-    'amount' => $amount
-  ];
+    [$date, $checkNumber, $description, $amount] = $transaction;
+
+    $transaction_type = 'income';
+
+    if(! empty($amount)){  
+
+      if(substr($amount, 0, 1) === '-'){
+        $transaction_type = 'expense';
+      }
+      
+      $amount = (float) str_replace(['$', ',', '-'], '', $amount);
+
+    }
+        
+    $transformedTransactions[] = [
+      'date' => $date,
+      'checkNumber' => $checkNumber,
+      'description' => $description,
+      'amount' => $amount,
+      'type' => $transaction_type
+    ];
+
+  }
+
+  return $transformedTransactions;
 
  }
 
