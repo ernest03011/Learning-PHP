@@ -16,6 +16,8 @@ define('STORAGE_PATH', $root . 'storage' . DIRECTORY_SEPARATOR);
 define('APP_PATH', $root . 'app' . DIRECTORY_SEPARATOR);
 define('VIEW_PATH', $root . 'views' . DIRECTORY_SEPARATOR);
 
+require_once APP_PATH . 'helpers.php';
+
 $router = new Router();
 
 require_once APP_PATH . "routes.php";
