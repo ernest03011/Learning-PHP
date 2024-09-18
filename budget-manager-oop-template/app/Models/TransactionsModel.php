@@ -120,7 +120,22 @@ class TransactionsModel extends Model{
  }
 
  public function getAllTransactions() {
-  
+  $statement = "
+    SELECT
+      *
+    FROM
+      transactions;
+  ";
+
+  try {
+    $statement = $this->db->query($statement);
+    $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
+    return $result;
+
+  } catch (\PDOException $e) {
+    exit($e->getMessage());
+    
+  }
  }
 
 }
