@@ -4,13 +4,27 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-class TransactionsModel {
+use App\Model;
+use App\Utilities;
 
- public function saveTransaction(string $fileName) : void
+class TransactionsModel extends Model{
+
+  private $transactions;
+
+ public function saveTransaction(string $fileName) : bool
  {
 
   $transactions = $this->parseCVSFile($fileName);
-  $data = $this->transformCSVRow($transactions);
+  $this->transactions = $this->transformCSVRow($transactions);
+  
+  if(isset($this->transactions)){
+    $result = $this->storeTransactionsOnDB();
+
+    if(isset($result) && is_int($result)){
+      return true;
+    }
+
+  }
 
  }
 
@@ -37,8 +51,9 @@ class TransactionsModel {
   $transformedTransactions = [];
 
   foreach ($transactions as $transaction) {
-
+    
     [$date, $checkNumber, $description, $amount] = $transaction;
+    $date = Utilities::formatDate($date);
 
     $transaction_type = 'income';
 
@@ -53,16 +68,49 @@ class TransactionsModel {
     }
         
     $transformedTransactions[] = [
-      'date' => $date,
-      'checkNumber' => $checkNumber,
+      'transaction_date' => $date,
+      'check_number' => $checkNumber,
       'description' => $description,
       'amount' => $amount,
-      'type' => $transaction_type
+      'transaction_type' => $transaction_type
     ];
 
   }
 
   return $transformedTransactions;
+
+ }
+
+ public function storeTransactionsOnDB(){
+
+  $statement = "
+    INSERT INTO transactions 
+        (transaction_date, check_number, description, amount, transaction_type)
+    VALUES
+        (:transaction_date, :check_number, :description, :amount, :transaction_type);
+  ";
+
+  $this->db->beginTransaction();
+
+  try {
+      $statement = $this->db->prepare($statement);
+
+      foreach ($this->transactions as $transaction) {
+        $statement->execute(array(
+            'transaction_date' => $transaction['transaction_date'] ?? '2024-09-17',
+            'check_number'  => $transaction['check_number'] ?? '000',
+            'description'  => $transaction['description'],
+            'amount'  => $transaction['amount'],
+            'transaction_type' => $transaction['transaction_type'] ?? 'income'
+        ));
+      }
+
+      $this->db->commit();
+      return $statement->rowCount();
+  } catch (\PDOException $e) {
+    $this->db->rollBack();  
+    exit($e->getMessage());
+  }  
 
  }
 
@@ -74,6 +122,5 @@ class TransactionsModel {
  public function getAllTransactions() {
   
  }
-
 
 }
