@@ -6,13 +6,12 @@ namespace App\Controllers;
 
 use App\View;
 use App\Models;
-use App\Helpers;
 use App\FileUploadHelper;
 
 class TransactionsController{
 
   // Handle multiple files being uploaded. 
-  public function uploadTransactions() : void
+  public function uploadTransactions() : View
   {
 
     $fileName = FileUploadHelper::handleUpload();
@@ -22,7 +21,11 @@ class TransactionsController{
       trigger_error('File "' . $filePath . '" does not exist', E_USER_ERROR);
     }
 
-    (new Models\TransactionsModel)->saveTransaction($fileName);
+    $result = (new Models\TransactionsModel)->saveTransaction($fileName);
+  
+    if($result){
+      return View::make('transactions/show.view');
+    }
   }
 
   // Show one Transaction Only. 
