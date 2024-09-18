@@ -28,6 +28,7 @@
       <h1>Show all Transactions!</h1>
         
         <p><a href="/">Go back to the Homepage!</a></p>
+        
         <table>
             <thead>
                 <tr>
@@ -38,24 +39,29 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- TODO -->
+                <?php foreach ($transactions as $transaction): ?>
+                    <tr>
+                        <td><?= htmlspecialchars($transaction['transaction_date']) ?></td>
+                        <td><?= htmlspecialchars($transaction['check_number'] ?? '-') ?></td>
+                        <td><?= htmlspecialchars($transaction['description']) ?></td>
+                        <td><?= htmlspecialchars($transaction['amount']) ?></td>
+                    </tr>
+                <?php endforeach; ?>
             </tbody>
             <tfoot>
                 <tr>
                     <th colspan="3">Total Income:</th>
-                    <td><!-- TODO --></td>
+                    <td><!-- TODO: Calculate total income --></td>
                 </tr>
                 <tr>
                     <th colspan="3">Total Expense:</th>
-                    <td><!-- TODO --></td>
+                    <td><!-- TODO: Calculate total expense --></td>
                 </tr>
                 <tr>
                     <th colspan="3">Net Total:</th>
-                    <td><!-- TODO --></td>
+                    <td><!-- TODO: Calculate net total --></td>
                 </tr>
             </tfoot>
         </table>
     </body>
 </html>
-
-
