@@ -26,7 +26,8 @@
     <body>
       
       <h1>Show all Transactions!</h1>
-
+        
+        <p><a href="/">Go back to the Homepage!</a></p>
         <table>
             <thead>
                 <tr>
