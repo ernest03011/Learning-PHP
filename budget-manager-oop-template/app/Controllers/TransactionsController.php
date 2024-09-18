@@ -42,8 +42,9 @@ class TransactionsController{
  
   public function displayAllTransactions() : View
   {
-    // Passing the Transactions using this Make method
-    return View::make('transactions/show.view');
+
+    $transactions = (new Models\TransactionsModel)->getAllTransactions();
+    return View::make('transactions/show.view', ['transactions' => $transactions]);
   }
 
 }
