@@ -1,3 +1,9 @@
+<?php
+
+use App\Utilities;
+
+?>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -41,25 +47,49 @@
             <tbody>
                 <?php foreach ($transactions as $transaction): ?>
                     <tr>
-                        <td><?= htmlspecialchars($transaction['transaction_date']) ?></td>
-                        <td><?= htmlspecialchars($transaction['check_number'] ?? '-') ?></td>
-                        <td><?= htmlspecialchars($transaction['description']) ?></td>
-                        <td><?= htmlspecialchars($transaction['amount']) ?></td>
+                        <td>
+                            <?= 
+                                htmlspecialchars(
+                                    Utilities::formatDateOrdinary($transaction['transaction_date'])
+                                );
+                            ?>
+                        </td>
+                        <td>
+                            <?= 
+                                htmlspecialchars(
+                                    empty($transaction['check_number']) ? "---"  : $transaction['check_number']
+                                ); 
+                            ?>
+                        </td>
+                        <td><?= htmlspecialchars($transaction['description']); ?></td>
+                        <td>
+                            <span style="color:<?= Utilities::getColorForTransactionType($transaction['transaction_type']) ?>">
+                                <?= 
+
+                                    htmlspecialchars(
+                                        Utilities::formatDollarAmount( 
+                                            (float) $transaction['amount'],
+                                            $transaction['transaction_type']
+                                        )
+                                    ); 
+                                ?>
+                            </span>
+                        </td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
             <tfoot>
                 <tr>
                     <th colspan="3">Total Income:</th>
-                    <td><!-- TODO: Calculate total income --></td>
+                    <td><?= $totals['totalIncome'] ?? 0; ?></td>
                 </tr>
                 <tr>
                     <th colspan="3">Total Expense:</th>
-                    <td><!-- TODO: Calculate total expense --></td>
+                    <td><?= $totals['totalExpense'] ?? 0; ?></td>
                 </tr>
                 <tr>
                     <th colspan="3">Net Total:</th>
-                    <td><!-- TODO: Calculate net total --></td>
+                    <td><?= $totals['netTotal'] ?? 0; ?></td>
                 </tr>
             </tfoot>
         </table>
