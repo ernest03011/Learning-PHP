@@ -43,8 +43,12 @@ class TransactionsController{
   public function displayAllTransactions() : View
   {
 
-    $transactions = (new Models\TransactionsModel)->getAllTransactions();
-    return View::make('transactions/show.view', ['transactions' => $transactions]);
+    [$transactions, $totals] = (new Models\TransactionsModel)->getAllTransactions();
+    return View::make('transactions/show.view', 
+      [
+        'transactions' => $transactions, 
+        'totals'=> $totals
+      ]);
   }
 
 }
