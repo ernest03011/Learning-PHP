@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\App;
 use App\Model;
 use App\Utilities;
 
 class TransactionsModel extends Model{
 
-  private $transactions;
+  private $transactions = [];
+  private $totals = [];
 
  public function saveTransaction(string $fileName) : bool
  {
@@ -28,7 +30,7 @@ class TransactionsModel extends Model{
 
  }
 
- public function parseCVSFile(string $fileName) : array
+ private function parseCVSFile(string $fileName) : array
  {
   $filePath = STORAGE_PATH . $fileName;
   $file = fopen($filePath, 'r');
@@ -45,7 +47,7 @@ class TransactionsModel extends Model{
   return $transactions;
  }
 
- public function transformCSVRow(array $transactions) : array
+ private function transformCSVRow(array $transactions) : array
  {
 
   $transformedTransactions = [];
@@ -81,7 +83,7 @@ class TransactionsModel extends Model{
 
  }
 
- public function storeTransactionsOnDB(){
+ private function storeTransactionsOnDB(){
 
   $statement = "
     INSERT INTO transactions 
@@ -114,12 +116,19 @@ class TransactionsModel extends Model{
 
  }
 
- public function extractTransactions() 
- {
-
- }
 
  public function getAllTransactions() {
+  $this->fectAllTransactionsFromDB();
+  
+  // if(! isset($this->transactions)){
+  // return an error if it is not set
+  // } 
+  $this->calculateTotals();
+
+  return [$this->transactions, $this->totals];
+ }
+
+ private function fectAllTransactionsFromDB(){
   $statement = "
     SELECT
       *
@@ -130,12 +139,35 @@ class TransactionsModel extends Model{
   try {
     $statement = $this->db->query($statement);
     $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
-    return $result;
+    $this->transactions = $result;
 
   } catch (\PDOException $e) {
     exit($e->getMessage());
     
   }
+ }
+
+ private function calculateTotals(){
+  $totals = [
+    'netTotal' => 0,
+    'totalIncome' => 0,
+    'totalExpense' => 0,
+  ];
+
+  foreach ($this->transactions as $transaction) {
+
+    if ($transaction['transaction_type'] === 'income' ) {
+      $totals['totalIncome'] += $transaction['amount'];
+    }
+    if ($transaction['transaction_type'] === 'expense' ) {
+      $totals['totalExpense'] += $transaction['amount'];
+    }
+
+
+  }
+
+  $totals['netTotal'] = $totals['totalIncome'] - $totals['totalExpense'];
+  $this->totals =  $totals;
  }
 
 }
