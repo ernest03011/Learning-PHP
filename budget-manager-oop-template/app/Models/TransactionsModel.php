@@ -13,10 +13,10 @@ class TransactionsModel extends Model{
   private $transactions = [];
   private $totals = [];
 
- public function saveTransaction(string $fileName) : bool
+ public function saveTransaction(string | array $fileNames) : bool
  {
 
-  $transactions = $this->parseCVSFile($fileName);
+  $transactions = $this->parseCVSFile($fileNames);
   $this->transactions = $this->transformCSVRow($transactions);
   
   if(isset($this->transactions)){
@@ -30,52 +30,62 @@ class TransactionsModel extends Model{
 
  }
 
- private function parseCVSFile(string $fileName) : array
+ private function parseCVSFile(string | array $fileNames) : array
  {
-  $filePath = STORAGE_PATH . $fileName;
-  $file = fopen($filePath, 'r');
+  
+  $fileNames = is_array($fileNames) ? $fileNames : [$fileNames];
+  $transactions_total = [];
+  foreach ($fileNames as $fileName) {
 
-  fgetcsv($file);
+    $filePath = STORAGE_PATH . $fileName;
+    $file = fopen($filePath, 'r');
+  
+    fgetcsv($file);
+    $transactions = [];
 
-  $transactions = [];
-
-  while(($transaction = fgetcsv($file)) !== false){
-
-    $transactions[] = $transaction;
+    while(($transaction = fgetcsv($file)) !== false){
+  
+      $transactions[] = $transaction;
+    }
+    
+    $transactions_total[] = $transactions;
   }
 
-  return $transactions;
+  return $transactions_total;
  }
 
- private function transformCSVRow(array $transactions) : array
+ private function transformCSVRow(array $array_of_array_of_transactions) : array
  {
 
   $transformedTransactions = [];
 
-  foreach ($transactions as $transaction) {
-    
-    [$date, $checkNumber, $description, $amount] = $transaction;
-    $date = Utilities::formatDate($date);
+  foreach ($array_of_array_of_transactions as $transactions) {
 
-    $transaction_type = 'income';
+    foreach ($transactions as $transaction) {
 
-    if(! empty($amount)){  
-
-      if(substr($amount, 0, 1) === '-'){
-        $transaction_type = 'expense';
-      }
-      
-      $amount = (float) str_replace(['$', ',', '-'], '', $amount);
-
-    }
+      [$date, $checkNumber, $description, $amount] = $transaction;
+      $date = Utilities::formatDate($date);
+  
+      $transaction_type = 'income';
+  
+      if(! empty($amount)){  
+  
+        if(substr($amount, 0, 1) === '-'){
+          $transaction_type = 'expense';
+        }
         
-    $transformedTransactions[] = [
-      'transaction_date' => $date,
-      'check_number' => $checkNumber,
-      'description' => $description,
-      'amount' => $amount,
-      'transaction_type' => $transaction_type
-    ];
+        $amount = (float) str_replace(['$', ',', '-'], '', $amount);
+  
+      }
+          
+      $transformedTransactions[] = [
+        'transaction_date' => $date,
+        'check_number' => $checkNumber,
+        'description' => $description,
+        'amount' => $amount,
+        'transaction_type' => $transaction_type
+      ];
+    }
 
   }
 
@@ -111,7 +121,8 @@ class TransactionsModel extends Model{
       return $statement->rowCount();
   } catch (\PDOException $e) {
     $this->db->rollBack();  
-    exit($e->getMessage());
+    dd($e->getMessage());
+    exit();
   }  
 
  }
