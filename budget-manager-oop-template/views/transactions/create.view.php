@@ -55,7 +55,7 @@
     <h1>Upload Transactions CSV</h1>
     <p><a href="/">Go back to the Homepage!</a></p>
     <form action="/transactions" method="POST" enctype="multipart/form-data">
-        <input type="file" name="transactions_file" accept=".csv" required>
+        <input type="file" name="transactions_file[]" accept=".csv" multiple required>
         <br>
         <button type="submit" class="btn">Upload File</button>
     </form>

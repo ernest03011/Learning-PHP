@@ -14,17 +14,24 @@ class TransactionsController{
   public function uploadTransactions() : View
   {
 
-    $fileName = FileUploadHelper::handleUpload();
+    $fileNames = FileUploadHelper::handleUpload();
+    
 
-    $filePath = STORAGE_PATH . $fileName;
-    if(! file_exists($filePath)){
-      trigger_error('File "' . $filePath . '" does not exist', E_USER_ERROR);
+    foreach ($fileNames as $fileName) {    
+      
+      $filePath = STORAGE_PATH . $fileName;
+  
+  
+      if(! file_exists($filePath)){
+        trigger_error('File "' . $filePath . '" does not exist', E_USER_ERROR);
+      }
     }
 
-    $result = (new Models\TransactionsModel)->saveTransaction($fileName);
+
+    $result = (new Models\TransactionsModel)->saveTransaction($fileNames);
   
     if($result){
-      return View::make('transactions/show.view');
+      return $this->displayAllTransactions();
     }
   }
 
