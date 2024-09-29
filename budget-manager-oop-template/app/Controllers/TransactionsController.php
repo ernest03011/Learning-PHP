@@ -14,7 +14,7 @@ class TransactionsController{
   public function uploadTransactions() : View
   {
 
-    $fileNames = FileUploadHelper::handleUpload();
+    $fileNames = (new FileUploadHelper)->handleUpload();
     
 
     foreach ($fileNames as $fileName) {    
