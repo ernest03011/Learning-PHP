@@ -13,14 +13,14 @@ class Validator{
   // This one needs to be updated. 
   // Create a sentence, paragraph to understand the process better. 
 
-  public function files(array $listOfFiles) : bool
+  public function files(array $files) : bool
   {
-    $amountOfFiles = count($listOfFiles['name']);
+    $amountOfFiles = count($files['name']);
 
     for ($i=0; $i < $amountOfFiles; $i++) { 
       
-      $fileName = $listOfFiles['name'][$i] ?? "";
-      $fileSize = $listOfFiles['size'][$i] ?? "";
+      $fileName = $files['name'][$i] ?? "";
+      $fileSize = $files['size'][$i] ?? "";
 
       $fileType = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
 
