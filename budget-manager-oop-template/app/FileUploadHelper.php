@@ -3,27 +3,44 @@
 declare(strict_types=1);
 
 namespace App;
+use App\Validator;
+use App\Exceptions\FileNotValidException;
 
 class FileUploadHelper{
 
-  // TODO : Add more validation and security for uploading the file. 
-  // Refactor the method to be able to upload multiple files. 
-
-    public static function handleUpload() : string | array
+    public function handleUpload() : array
     {
       $names= [];
+      $files = $_FILES["transactions_file"];
 
-      foreach ($_FILES["transactions_file"]["tmp_name"] as $key => $value) {
+      $this->validateFiles($files);
 
-        if($_FILES["transactions_file"]["error"][$key] == UPLOAD_ERR_OK){
-            $tmp_name = $_FILES["transactions_file"]["tmp_name"][$key];
-            $name = basename($_FILES["transactions_file"]["name"][$key]);
-            move_uploaded_file($tmp_name, STORAGE_PATH . $name);  
-        }
-
-        $names[] = $name;
-      }
+      $amountOfFiles = count($files["name"]);
   
+      for ($i=0; $i < $amountOfFiles; $i++) { 
+
+        if($files["error"][$i] == UPLOAD_ERR_OK)
+        {
+                $tmp_name = $files["tmp_name"][$i];
+                $name = basename($files["name"][$i]);
+                move_uploaded_file($tmp_name, STORAGE_PATH . $name);  
+        }
+    
+        $names[] = $name;
+    
+      }
+
       return $names;
     } 
+
+    private function validateFiles(array $files ) : void
+    {
+      $areFilesValid =  (new Validator)->files($files);
+
+      if($areFilesValid === False){
+        throw new FileNotValidException();
+      }
+
+
+    }
 }
