@@ -10,7 +10,6 @@ use App\FileUploadHelper;
 
 class TransactionsController{
 
-  // Handle multiple files being uploaded. 
   public function uploadTransactions() : View
   {
 
@@ -34,8 +33,7 @@ class TransactionsController{
       return $this->displayAllTransactions();
     }
   }
-
-  // Show one Transaction Only. 
+ 
   public function showTransaction() : View
   {
     $desc = $_GET['desc'];
