@@ -38,8 +38,13 @@ class TransactionsController{
   // Show one Transaction Only. 
   public function showTransaction() : View
   {
+    $desc = $_GET['desc'];
 
-    return View::make('');
+    $transaction = (new Models\TransactionsModel)->getTransaction($desc);
+    return View::make('transactions/display.transaction.view', 
+      [
+        'transaction' => $transaction
+      ]);
   } 
 
   public function showTransactionUploadPage(): View
