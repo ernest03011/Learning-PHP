@@ -12,6 +12,8 @@ class TransactionsModel extends Model{
 
   private $transactions = [];
   private $totals = [];
+  private $transaction_description = "";
+  private $transaction;
 
  public function saveTransaction(string | array $fileNames) : bool
  {
@@ -179,6 +181,45 @@ class TransactionsModel extends Model{
 
   $totals['netTotal'] = $totals['totalIncome'] - $totals['totalExpense'];
   $this->totals =  $totals;
+ }
+
+ public function getTransaction($desc)
+ {
+
+  $this->transaction_description = $desc;
+  
+  $this->transaction = $this->fetchTransactionByDescriptionFromDB();
+
+  return $this->transaction;
+
+ }
+
+ private function fetchTransactionByDescriptionFromDB(){
+
+  $statement = "
+    SELECT
+      *
+    FROM
+      transactions
+    WHERE description = :description;
+  ";
+
+  try {
+
+    $statement = $this->db->prepare($statement);
+    $statement->execute(
+      array(
+      'description' => $this->transaction_description
+      )
+    );
+
+    $result = $statement->fetch(\PDO::FETCH_ASSOC);
+    return $result;
+
+  } catch (\PDOException $e) {
+      exit($e->getMessage());
+  } 
+
  }
 
 }
