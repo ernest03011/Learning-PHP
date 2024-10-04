@@ -10,7 +10,6 @@ use App\FileUploadHelper;
 
 class TransactionsController{
 
-  // Handle multiple files being uploaded. 
   public function uploadTransactions() : View
   {
 
@@ -28,19 +27,17 @@ class TransactionsController{
     }
 
 
-    $result = (new Models\TransactionsModel)->saveTransaction($fileNames);
+    (new Models\TransactionsModel)->saveTransaction($fileNames);
   
-    if($result){
-      return $this->displayAllTransactions();
-    }
-  }
+    return $this->displayAllTransactions();
 
-  // Show one Transaction Only. 
+  }
+ 
   public function showTransaction() : View
   {
-    $desc = $_GET['desc'];
+    $transaction_description = $_GET['desc'];
 
-    $transaction = (new Models\TransactionsModel)->getTransaction($desc);
+    $transaction = (new Models\TransactionsModel)->getTransaction($transaction_description);
     return View::make('transactions/display.transaction.view', 
       [
         'transaction' => $transaction
