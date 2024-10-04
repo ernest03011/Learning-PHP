@@ -36,9 +36,9 @@ class TransactionsController{
  
   public function showTransaction() : View
   {
-    $desc = $_GET['desc'];
+    $transaction_description = $_GET['desc'];
 
-    $transaction = (new Models\TransactionsModel)->getTransaction($desc);
+    $transaction = (new Models\TransactionsModel)->getTransaction($transaction_description);
     return View::make('transactions/display.transaction.view', 
       [
         'transaction' => $transaction

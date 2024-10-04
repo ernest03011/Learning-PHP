@@ -62,7 +62,7 @@ use App\Utilities;
                             ?>
                         </td>
                         <td>
-                            <a href="transactions/show?desc=<?=htmlspecialchars($transaction['description']) ?>">
+                            <a href="transactions/show?description=<?=htmlspecialchars($transaction['description']) ?>">
                                 <?= 
                                     htmlspecialchars(
                                         $transaction['description']

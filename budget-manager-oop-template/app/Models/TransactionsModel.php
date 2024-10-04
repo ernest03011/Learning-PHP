@@ -183,7 +183,7 @@ class TransactionsModel extends Model{
   $this->totals =  $totals;
  }
 
- public function getTransaction($desc)
+ public function getTransaction($transaction_description)
  {
 
   $this->transaction_description = $desc;
