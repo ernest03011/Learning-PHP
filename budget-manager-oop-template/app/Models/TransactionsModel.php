@@ -186,7 +186,7 @@ class TransactionsModel extends Model{
  public function getTransaction($transaction_description)
  {
 
-  $this->transaction_description = $desc;
+  $this->transaction_description = $transaction_description;
   
   $this->transaction = $this->fetchTransactionByDescriptionFromDB();
 
