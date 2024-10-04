@@ -95,7 +95,8 @@ class TransactionsModel extends Model{
 
  }
 
- private function storeTransactionsOnDB(){
+ private function storeTransactionsOnDB() : void
+ {
 
   $statement = "
     INSERT INTO transactions 
@@ -120,17 +121,16 @@ class TransactionsModel extends Model{
       }
 
       $this->db->commit();
-      return $statement->rowCount();
   } catch (\PDOException $e) {
     $this->db->rollBack();  
-    dd($e->getMessage());
     exit();
   }  
 
  }
 
 
- public function getAllTransactions() {
+ public function getAllTransactions() : array
+ {
   $this->fectAllTransactionsFromDB();
   
   // if(! isset($this->transactions)){
@@ -141,7 +141,8 @@ class TransactionsModel extends Model{
   return [$this->transactions, $this->totals];
  }
 
- private function fectAllTransactionsFromDB(){
+ private function fectAllTransactionsFromDB() : void
+ {
   $statement = "
     SELECT
       *
@@ -160,7 +161,8 @@ class TransactionsModel extends Model{
   }
  }
 
- private function calculateTotals(){
+ private function calculateTotals() : void
+ {
   $totals = [
     'netTotal' => 0,
     'totalIncome' => 0,
@@ -183,7 +185,7 @@ class TransactionsModel extends Model{
   $this->totals =  $totals;
  }
 
- public function getTransaction($transaction_description)
+ public function getTransaction($transaction_description) : array
  {
 
   $this->transaction_description = $transaction_description;
@@ -194,7 +196,8 @@ class TransactionsModel extends Model{
 
  }
 
- private function fetchTransactionByDescriptionFromDB(){
+ private function fetchTransactionByDescriptionFromDB() : array
+ {
 
   $statement = "
     SELECT
