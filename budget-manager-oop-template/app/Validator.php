@@ -10,9 +10,6 @@ class Validator{
   private $maxFileSize = 2 * 1024 * 1024;
 
 
-  // This one needs to be updated. 
-  // Create a sentence, paragraph to understand the process better. 
-
   public function files(array $files) : bool
   {
     $amountOfFiles = count($files['name']);
@@ -24,8 +21,8 @@ class Validator{
 
       $fileType = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
 
-      $isIAllowedType = in_array($fileType, $this->allowedTypes) ? true : false;
-      $isAnAllowedSize = $fileSize < $this->maxFileSize ? true : false;
+      $isIAllowedType = $this->isAllowedType($fileType);
+      $isAnAllowedSize = $this->isMaxFileSize($fileSize);
 
       if($isAnAllowedSize && $isIAllowedType){
         return true;
@@ -33,6 +30,19 @@ class Validator{
     }
 
     return false;
+  }
+
+  private function isAllowedType(string | array $fileType) : bool
+  {
+
+    return in_array($fileType, $this->allowedTypes) ? true : false;
+  }
+
+  private function isMaxFileSize(string $fileSize) : bool
+  {
+
+    return $fileSize < $this->maxFileSize ? true : false;
+
   }
 
 }
