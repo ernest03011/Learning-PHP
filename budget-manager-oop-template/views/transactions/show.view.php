@@ -61,7 +61,16 @@ use App\Utilities;
                                 ); 
                             ?>
                         </td>
-                        <td><?= htmlspecialchars($transaction['description']); ?></td>
+                        <td>
+                            <a href="transactions/show?desc=<?=htmlspecialchars($transaction['description']) ?>">
+                                <?= 
+                                    htmlspecialchars(
+                                        $transaction['description']
+                                    ); 
+                                
+                                ?>
+                            </a>
+                        </td>
                         <td>
                             <span style="color:<?= Utilities::getColorForTransactionType($transaction['transaction_type']) ?>">
                                 <?= 
