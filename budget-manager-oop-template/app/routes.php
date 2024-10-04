@@ -19,3 +19,6 @@ $router
 $router
     ->get('/transactions/create', [Controllers\TransactionsController::class, 'showTransactionUploadPage']);
 
+$router
+    ->get('/transactions/show', [Controllers\TransactionsController::class, 'showTransaction']);
+
