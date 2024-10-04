@@ -15,19 +15,14 @@ class TransactionsModel extends Model{
   private $transaction_description = "";
   private $transaction;
 
- public function saveTransaction(string | array $fileNames) : bool
+ public function saveTransaction(string | array $fileNames) : void
  {
 
   $transactions = $this->parseCVSFile($fileNames);
   $this->transactions = $this->transformCSVRow($transactions);
   
   if(isset($this->transactions)){
-    $result = $this->storeTransactionsOnDB();
-
-    if(isset($result) && is_int($result)){
-      return true;
-    }
-
+    $this->storeTransactionsOnDB();
   }
 
  }

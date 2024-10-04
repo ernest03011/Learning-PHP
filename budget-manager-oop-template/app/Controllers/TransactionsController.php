@@ -27,11 +27,10 @@ class TransactionsController{
     }
 
 
-    $result = (new Models\TransactionsModel)->saveTransaction($fileNames);
+    (new Models\TransactionsModel)->saveTransaction($fileNames);
   
-    if($result){
-      return $this->displayAllTransactions();
-    }
+    return $this->displayAllTransactions();
+
   }
  
   public function showTransaction() : View
