@@ -10,7 +10,7 @@ use App\FileUploadHelper;
 
 class TransactionsController{
 
-  public function uploadTransactions() : View
+  public function uploadTransactions()
   {
 
     $fileNames = (new FileUploadHelper)->handleUpload();
@@ -29,7 +29,9 @@ class TransactionsController{
 
     (new Models\TransactionsModel)->saveTransaction($fileNames);
   
-    return $this->displayAllTransactions();
+    // Working as coordinator, so it should not return anything, only call it. 
+    // A render method
+    $this->displayAllTransactions();
 
   }
  
