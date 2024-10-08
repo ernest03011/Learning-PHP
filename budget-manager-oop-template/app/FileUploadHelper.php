@@ -43,4 +43,16 @@ class FileUploadHelper{
 
 
     }
+
+    public function validateFilePath(array $fileNames, string $path) : void
+    {
+      foreach ($fileNames as $fileName) {    
+      
+        $filePath = $path . $fileName;
+
+        if(! file_exists($filePath)){
+          trigger_error('File "' . $filePath . '" does not exist', E_USER_ERROR);
+        }
+      }
+    }
 }

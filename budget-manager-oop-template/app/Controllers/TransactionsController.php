@@ -7,59 +7,61 @@ namespace App\Controllers;
 use App\View;
 use App\Models;
 use App\FileUploadHelper;
+use App\Request;
 
 class TransactionsController{
 
-  public function uploadTransactions()
+  private $fileUploadHelper;
+  private $transactionsModel;
+  private $request;
+
+  public function __construct() 
+  {
+    $this->fileUploadHelper = new FileUploadHelper();
+    $this->transactionsModel = new Models\TransactionsModel();
+    $this->request = new Request();
+
+  }
+
+  public function uploadTransactions() : View
   {
 
-    $fileNames = (new FileUploadHelper)->handleUpload();
-    
+    $fileNames = $this->fileUploadHelper->handleUpload();
+    // TODO - Avoid using hard-coded path. 
+    // TODO - Refactor this method later on. 
+    $this->fileUploadHelper->validateFilePath($fileNames, STORAGE_PATH);
 
-    foreach ($fileNames as $fileName) {    
-      
-      $filePath = STORAGE_PATH . $fileName;
+    $this->transactionsModel->saveTransaction($fileNames);
   
-  
-      if(! file_exists($filePath)){
-        trigger_error('File "' . $filePath . '" does not exist', E_USER_ERROR);
-      }
-    }
-
-
-    (new Models\TransactionsModel)->saveTransaction($fileNames);
-  
-    // Working as coordinator, so it should not return anything, only call it. 
-    // A render method
-    $this->displayAllTransactions();
+    return $this->displayAllTransactions();
 
   }
  
   public function showTransaction() : View
   {
-    $transaction_description = $_GET['desc'];
+    $transaction_description = $this->request->handle('get', 'desc');
 
-    $transaction = (new Models\TransactionsModel)->getTransaction($transaction_description);
+    $transaction = $this->transactionsModel->getTransaction($transaction_description);
     return View::make('transactions/display.transaction.view', 
       [
         'transaction' => $transaction
       ]);
   } 
 
-  public function showTransactionUploadPage(): View
+ 
+  public function showTransactionUploadPage() : View
   {
       return View::make('transactions/create.view');
   }
  
   public function displayAllTransactions() : View
   {
-
-    [$transactions, $totals] = (new Models\TransactionsModel)->getAllTransactions();
+    
+    [$transactions, $totals] = $this->transactionsModel->getAllTransactions();
     return View::make('transactions/show.view', 
       [
         'transactions' => $transactions, 
         'totals'=> $totals
       ]);
   }
-
 }
