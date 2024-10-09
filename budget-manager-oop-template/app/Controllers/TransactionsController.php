@@ -8,6 +8,7 @@ use App\View;
 use App\Models;
 use App\FileUploadHelper;
 use App\Request;
+use App\Exceptions\FileNotValidException;
 
 class TransactionsController{
 
@@ -26,14 +27,23 @@ class TransactionsController{
   public function uploadTransactions() : View
   {
 
-    $fileNames = $this->fileUploadHelper->handleUpload();
-    // TODO - Avoid using hard-coded path. 
-    // TODO - Refactor this method later on. 
-    $this->fileUploadHelper->validateFilePath($fileNames, STORAGE_PATH);
+    try {
+      $fileNames = $this->fileUploadHelper->handleUpload();
+      // TODO - Avoid using hard-coded path. 
+      // TODO - Refactor this method later on. 
 
-    $this->transactionsModel->saveTransaction($fileNames);
-  
-    return $this->displayAllTransactions();
+      $this->fileUploadHelper->validateFilePath($fileNames, STORAGE_PATH);
+      $this->transactionsModel->saveTransaction($fileNames);
+      
+      return $this->displayAllTransactions();    
+
+    } catch (FileNotValidException $e) {
+        return View::make('error/file.error', ['message' => $e->getMessage()]);
+
+    } catch (\Exception $e){
+        return View::make('error/general.error');
+
+    }
 
   }
  
