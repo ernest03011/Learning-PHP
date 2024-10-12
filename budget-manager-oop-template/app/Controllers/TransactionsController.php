@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-use App\View;
-use App\Models;
-use App\FileUploadHelper;
-use App\Request;
-use App\Exceptions\FileNotValidException;
+use App\Core\View;
+use App\Models\TransactionsModel;
+use App\Core\FileUploadHelper;
+use App\Core\Request;
+use App\Core\Exceptions\FileNotValidException;
 
 class TransactionsController{
 
@@ -19,7 +19,7 @@ class TransactionsController{
   public function __construct() 
   {
     $this->fileUploadHelper = new FileUploadHelper();
-    $this->transactionsModel = new Models\TransactionsModel();
+    $this->transactionsModel = new TransactionsModel();
     $this->request = new Request();
 
   }

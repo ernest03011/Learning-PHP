@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App;
+namespace App\Core;
 
-use App\Exceptions\BadMethodCallException;
+use App\Core\Exceptions\BadMethodCallException;
 
 class Request
 {

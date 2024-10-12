@@ -1,6 +1,6 @@
 <?php
 
-use App\Utilities;
+use App\Core\Utilities;
 
 ?>
 

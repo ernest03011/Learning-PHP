@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App;
-use App\Validator;
-use App\Exceptions\FileNotValidException;
+namespace App\Core;
+
+use App\Validator\FileValidator;
+use App\Core\Exceptions\FileNotValidException;
 
 class FileUploadHelper{
 
@@ -35,7 +36,7 @@ class FileUploadHelper{
 
     private function validateFiles(array $files ) : void
     {
-      $areFilesValid =  (new Validator)->files($files);
+      $areFilesValid =  (new FileValidator)->validate($files);
 
       if($areFilesValid === False){
         throw new FileNotValidException();

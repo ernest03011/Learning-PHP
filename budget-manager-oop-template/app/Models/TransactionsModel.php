@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\App;
-use App\Model;
-use App\Utilities;
+use App\Core\App;
+use App\Core\Model;
+use App\Core\Utilities;
 
 class TransactionsModel extends Model{
 

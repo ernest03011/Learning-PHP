@@ -2,8 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace App\Exceptions;
-
+namespace App\Core\Exceptions;
 
 
 class ViewNotFoundException extends \Exception

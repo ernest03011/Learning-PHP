@@ -2,9 +2,9 @@
 
 declare(strict_types = 1);
 
-use App\App;
-use App\Config;
-use App\Router;
+use App\Core\App;
+use App\Core\Config;
+use App\Core\Router;
 
 $root = dirname(__DIR__) . DIRECTORY_SEPARATOR;
 require_once $root . 'vendor/autoload.php';
@@ -16,11 +16,11 @@ define('STORAGE_PATH', $root . 'storage' . DIRECTORY_SEPARATOR);
 define('APP_PATH', $root . 'app' . DIRECTORY_SEPARATOR);
 define('VIEW_PATH', $root . 'views' . DIRECTORY_SEPARATOR);
 
-require_once APP_PATH . 'helpers.php';
+require_once APP_PATH . 'Core/helpers.php';
 
 $router = new Router();
 
-require_once APP_PATH . "routes.php";
+require_once APP_PATH . "Core/routes.php";
 
 (new App(
     $router,
